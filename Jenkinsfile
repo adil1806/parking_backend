@@ -9,7 +9,6 @@ pipeline {
 	stage('Build') {
 		steps {
 				sh 'mvn clean verify -Dmaven.test.skip=true'
-			}
 		}
 	}
 	stage ('Release') {
