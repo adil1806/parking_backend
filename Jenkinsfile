@@ -13,10 +13,7 @@ pipeline {
 	}
 	stage('Code Analysis') {
 		steps {
-		     sh '''
-		     export SONAR_TOKEN=7aa74d987bec902768be8aad1518179de9cff4fa
-		     mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true
-		     '''
+		     sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=khann-adill_parking_backend -Dsonar.organization=khann-adill -Dsonar.login=7aa74d987bec902768be8aad1518179de9cff4fa'
 		}	
 		}
 	stage ('Release') {
