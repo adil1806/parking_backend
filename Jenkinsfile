@@ -11,6 +11,11 @@ pipeline {
 				sh 'mvn clean verify -Dmaven.test.skip=true'
 		}
 	}
+	stage('Code Analysis') {
+		steps {
+				sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+		}	
+		}
 	stage ('Release') {
 		when {
 		branch 'master'
