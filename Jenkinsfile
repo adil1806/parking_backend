@@ -13,7 +13,7 @@ pipeline {
 	}
 	stage('Code Analysis') {
 		steps {
-				sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar'
+				sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true'
 		}	
 		}
 	stage ('Release') {
