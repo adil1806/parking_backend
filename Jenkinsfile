@@ -3,29 +3,25 @@ pipeline {
 	stages {
       stage('Git Checkout') {
          steps {
-            git 'https://github.com/Anjuna661/parking_backend.git'
+            git 'https://github.com/khann-adill/parking_backend.git'
 		}
 	}
 	stage('Build') {
 		steps {
-			withSonarQubeEnv('Sonar') {
-				sh '/opt/maven/bin/mvn clean verify sonar:sonar -Dmaven.test.skip=true'
+				sh 'mvn clean verify -Dmaven.test.skip=true'
+		}
+	}
+	stage('Code Analysis') {
+		steps {
+			withSonarQubeEnv('SonarQube') {
+				 sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=khann-adill_parking_backend -Dsonar.organization=khann-adill -Dsonar.login=7aa74d987bec902768be8aad1518179de9cff4fa'
 			}
 		}
 	}
-	stage("Quality Gate") {
-            steps {
-              timeout(time: 5, unit: 'MINUTES') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-	stage ('deploy') {
-		steps {
-			sh '/opt/maven/bin/mvn clean deploy -Dmaven.test.skip=true'
+	stage ('Release') {
+		when {
+		branch 'master'
 		}
-	}
-	stage ('Release and') {
 		steps {
 			sh 'export JENKINS_NODE_COOKIE=dontkillme ;nohup java -jar $WORKSPACE/target/*.jar &'
 		}
